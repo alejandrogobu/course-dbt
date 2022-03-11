@@ -1,0 +1,286 @@
+version: 2
+
+models:
+  - name: stg_addresses
+    description: >
+      Info about addresses for users and delivery orders.
+    columns:
+      - name: address_id
+        description: >
+          UUID for each unique address on platform.
+        tests:
+          - not_null
+          - unique
+      - name: address
+        description: >
+          The first few lines of the address.
+        tests:
+          - not_null
+      - name: zipcode
+        description: >
+          The zipcode of the address.
+        tests:
+          - not_null
+      - name: state
+        description: >
+          State this delivery address is based in.
+        tests:
+          - not_null
+      - name: country
+        description: >
+          Country this delivery address is based in.
+        tests:
+          - not_null
+
+  - name: stg_users
+    description: >
+      Data about all users in Greenery.
+    columns:
+      - name: user_id
+        description: >
+          UUID for each unique user on platform.
+        tests:
+          - not_null
+          - unique
+      - name: first_name
+        description: >
+          First name of the user.
+        tests:
+          - not_null
+      - name: last_name
+        description: >
+          Last name of the user.
+        tests:
+          - not_null
+      - name: email
+        description: >
+          Email address of the user.
+        tests:
+          - not_null
+      - name: phone_number
+        description: >
+          Phone number of the user.
+        tests:
+          - not_null
+      - name: created_at_utc
+        description: >
+          Timestamp the user was created (UTC).
+        tests:
+          - not_null
+      - name: updated_at_utc
+        description: >
+          Timestamp the user was last updated (UTC).
+      - name: address_id
+        description: >
+          Default delivery address for the user.
+        tests:
+          - not_null
+
+  - name: stg_promos
+    description: >
+      Data about all products in Greenery.
+    columns:
+      - name: promo_id
+        description: >
+          Each unique promocode on platform.
+        tests:
+          - not_null
+          - unique
+      - name: total_discount_dollars
+        description: >
+          Absolute dollar amount that is given off with the code.
+        tests:
+          - not_null
+          - positive_values
+      - name: status_promo
+        description: >
+          Is the promo code active or disabled.
+        tests:
+          - not_null
+          - accepted_values:
+                    values: ['inactive','active']
+
+  - name: stg_products
+    description: >
+      Data about all products in Greenery.
+    columns:
+      - name: product_id
+        description: >
+          UUID for each unique product on platform.
+        tests:
+          - not_null
+          - unique
+      - name: product_name
+        description: >
+          Name of the product.
+        tests:
+          - unique
+          - not_null
+      - name: unit_price
+        description: >
+          Price of the product.
+        tests:
+          - not_null
+          - positive_values
+      - name: inventory
+        description: >
+          Amount of the inventory we have for this product.
+        tests:
+          - not_null
+          - positive_values
+
+  - name: stg_orders
+    description: >
+      Data about all orders in Greenery.
+    columns:
+      - name: order_id
+        description: >
+          UUID for each unique order on platform.
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        description: >
+          UserId of the user that placed this order.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_users')
+                field: user_id
+      - name: promo_id
+        description: >
+          PromoId if any was used in the order.
+        tests:
+          - relationships:
+                to: ref('stg_promos')
+                field: promo_id
+      - name: address_id
+        description: >
+          Delivery address for this order.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_addresses')
+                field: address_id 
+      - name: created_at_utc
+        description: >
+          Timestamp when the order was created (UTC).
+        tests:
+          - not_null
+      - name: item_order_cost
+        description: >
+          Dollar about of the items in the order ($).
+        tests:
+          - not_null
+          - positive_values
+      - name: shipping_cost
+        description: >
+          Cost of shipping for the order ($).
+        tests:
+          - not_null
+          - positive_values
+      - name: total_order_cost
+        description: >
+          Total cost of the order including shipping ($).
+        tests:
+          - not_null
+          - positive_values
+      - name: tracking_id
+        description: >
+          Tracking number for the order/package.
+      - name: shipping_service
+        description: >
+          Company that was used for shipping.
+      - name: estimated_delivery_at_utc
+        description: >
+          Estimated date of delivery (UTC).
+      - name: delivered_at_utc
+        description: >
+          Actual timestamp of delivery (UTC).
+      - name: status_order
+        description: >
+          Status of the order.
+        tests:
+          - not_null
+          - accepted_values:
+                values: ['shipped','preparing','delivered']
+
+  - name: stg_order_items
+    description: >
+      Data about items in a specific order like product and quantity.
+    columns:
+      - name: order_id
+        description: >
+          OrderId of this order.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_orders')
+                field: order_id 
+      - name: product_id
+        description: >
+          ProductId of a single item in this order.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_products')
+                field: product_id           
+      - name: quantity
+        description: >
+          Number of units of the product in this order.
+        tests:
+          - not_null
+          - positive_values
+
+  - name: stg_events
+    description: >
+      Data about events in the platform of Greenery.
+    columns:
+      - name: event_id
+        description: >
+          UUID of each unique event on the platform.
+        tests:
+          - not_null
+          - unique
+      - name: session_id
+        description: >
+          UUID of each browsing session on the platform which can contain many events.
+        tests:
+          - not_null
+      - name: user_id
+        description: >
+          UUID of the user that this event is associated with.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_users')
+                field: user_id     
+      - name: page_url
+        description: >
+          URL that the event happened on.
+        tests:
+          - not_null
+      - name: created_at_utc
+        description: >
+          Timestamp of the event (UTC).
+        tests:
+          - not_null
+      - name: event_type
+        description: >
+          Type of event.
+        tests:
+          - not_null
+      - name: order_id
+        description: >
+          If the event is specific to an order (mostly used for checkout).
+        test:
+          - relationships:
+                to: ref('stg_orders')
+                field: order_id 
+      - name: product_id
+        description: >
+          If the event is specific to a product.
+        test:
+          - relationships:
+                to: ref('stg_products')
+                field: product_id
