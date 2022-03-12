@@ -12,7 +12,7 @@ renamed_casted AS (
         , created_at AS created_at_utc
         , order_cost AS item_order_cost
         , shipping_cost AS shipping_cost
-        , order_cost AS total_order_cost
+        , order_total AS total_order_cost
         , tracking_id AS tracking_id
         , shipping_service AS shipping_service
         , estimated_delivery_at AS estimated_delivery_at_utc
