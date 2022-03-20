@@ -15,6 +15,7 @@ Apache 2.0
 ### 1. What is our user repeat rate?
 
 ``` sql
+WITH repeat_rate AS(
   SELECT
     SUM(CASE WHEN total_number_orders > 1 THEN 1 END) repeated_users,
     SUM(CASE WHEN total_number_orders > 0 THEN 1 END) purchases_users
