@@ -81,7 +81,7 @@ In the case of dimensions that were exact copies of the staging I have not added
 
 No, I found no errors in the data
 
-### 3. Your stakeholders at Greenery want to understand the state of the data each day. Explain how you would ensure these tests are passing regularly and how you would alert stakeholders about bad data getting through.**
+### 3. Your stakeholders at Greenery want to understand the state of the data each day. Explain how you would ensure these tests are passing regularly and how you would alert stakeholders about bad data getting through.
 
 In the case of using dbt cloud we could plan the daily execution and send notifications through a slack channel. In the case of using dbt core we could orchestrate the pipeline with an external tool, for example Dagster or Airflow.
 
