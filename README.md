@@ -29,13 +29,13 @@ FROM repeat_rate
 
 Answer: **79,8%**
 
-### 2. What are good indicators of a user who will likely purchase again? What about indicators of users who are likely NOT to purchase again? If you had more data, what features would you want to look into to answer this question?**
+### 2. What are good indicators of a user who will likely purchase again? What about indicators of users who are likely NOT to purchase again? If you had more data, what features would you want to look into to answer this question?
 
 With the demographics we have, users from Texas and California represent 37% of the users who purchase more than once.
 
 It would be interesting to have information such as age, gender...
 
-### 2. Explain the marts models you added. Why did you organize the models in the way you did? ?**
+### 2. Explain the marts models you added. Why did you organize the models in the way you did? ?
 
 1. I have created a base model to add a unique id for the promos so as not to use the name of the promo as a unique key.  This base model is used in the sgt_promos and stg_orders to add in these models also the unique key.
 
