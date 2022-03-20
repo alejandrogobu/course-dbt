@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: agg_user_sessions
+    description: >
+      Info about users and events aggregate by user and sessions.
+    columns:
+      - name: session_id
+        description: >
+          .
+        tests:
+          - not_null
+      - name: user_id
+        description: >
+          .
+        tests:
+          - not_null
+      - name: first_name
+        description: >
+          .
+        tests:
+          - not_null
+      - name: email
+        description: >
+          .
+        tests:
+          - not_null
+      - name: page_view
+        description: >
+          .
+        tests:
+          - not_null
+          - positive_values
+      - name: add_to_cart
+        description: >
+          .
+        tests:
+          - not_null
+          - positive_values
+      - name: checkout
+        description: >
+          .
+        tests:
+          - not_null
+          - positive_values
+      - name: package_shipped
+        description: >
+          .
+        tests:
+          - not_null
+          - positive_values
+      - name: first_event_time
+        description: >
+          .
+        tests:
+          - not_null
+      - name: last_event_time
+        description: >
+          .
+        tests:
+          - not_null
+      - name: session_length_minutes
+        description: >
+          .
+        tests:
+          - not_null
+          - positive_values
+

@@ -1,0 +1,99 @@
+version: 2
+
+models:
+  - name: agg_users_orders
+    description: >
+      All info for each user in Greneery and the orders related with the users.
+    columns:
+      - name: user_id
+        description: >
+          Data about all users in Greenery.
+        tests:
+          - not_null
+          - unique
+      - name: first_name
+        description: >
+          First name of the user.
+        tests:
+          - not_null
+      - name: last_name
+        description: >
+          Last name of the user.
+        tests:
+          - not_null
+      - name: email
+        description: >
+          Email address of the user.
+        tests:
+          - not_null
+      - name: phone_number
+        description: >
+          Phone number of the user.
+        tests:
+          - not_null
+      - name: created_at_utc
+        description: >
+          Timestamp the user was created (UTC).
+        tests:
+          - not_null
+      - name: updated_at_utc
+        description: >
+          Timestamp the user was last updated (UTC).
+        tests:
+          - not_null
+      - name: address
+        description: >
+          The first few lines of the address.
+        tests:
+          - not_null
+      - name: zipcode
+        description: >
+          The zipcode of the address.
+        tests:
+          - not_null
+      - name: state
+        description: >
+          State that the user live.
+        tests:
+          - not_null
+      - name: country
+        description: >
+          Country that the user live.
+        tests:
+          - not_null
+      - name: total_number_orders
+        description: >
+          Total number of orders by the user (USD).
+        tests:
+          - not_null
+          - positive_values
+      - name: total_order_cost_usd
+        description: >
+          Total cost by the user (USD).
+        tests:
+          - not_null
+          - positive_values
+      - name: total_shipping_cost_usd
+        description: >
+          Total shipping cost by the user (USD).
+        tests:
+          - not_null
+          - positive_values
+      - name: total_discount_usd
+        description: >
+          Total discount by the user (USD).
+        tests:
+          - not_null
+          - positive_values
+      - name: total_quantity_product
+        description: >
+          Total quantity in all order by the user.
+        tests:
+          - not_null
+          - positive_values
+      - name: total_different_product_purchased
+        description: >
+          Total differents product purchased by the user.
+        tests:
+          - not_null
+          - positive_values

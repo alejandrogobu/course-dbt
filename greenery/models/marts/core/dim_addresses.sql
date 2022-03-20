@@ -1,6 +1,6 @@
-WITH src_addresses AS (
+WITH stg_addresses AS (
     SELECT * 
-    FROM {{ source('postgres', 'addresses') }}
+    FROM {{ ref ('stg_addresses') }}
     ),
 
 renamed_casted AS (
@@ -10,7 +10,7 @@ renamed_casted AS (
         , zipcode
         , state
         , country
-    FROM src_addresses
+    FROM stg_addresses
     )
 
 SELECT * FROM renamed_casted

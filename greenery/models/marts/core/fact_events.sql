@@ -1,6 +1,6 @@
-WITH src_events AS (
+WITH stg_events AS (
     SELECT * 
-    FROM {{ source('postgres', 'events') }}
+    FROM {{ ref('stg_events') }}
     ),
 
 renamed_casted AS (
@@ -9,11 +9,11 @@ renamed_casted AS (
         , session_id
         , user_id
         , page_url
-        , created_at AS created_at_utc
+        , created_at_utc
         , event_type
         , order_id
         , product_id
-    FROM src_events
+    FROM stg_events
     )
 
 SELECT * FROM renamed_casted

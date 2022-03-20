@@ -1,13 +1,14 @@
 WITH src_promos AS (
     SELECT * 
-    FROM {{ source('postgres', 'promos') }}
+    FROM {{ ref('base_promos') }}
     ),
 
 renamed_casted AS (
     SELECT
-    promo_id AS promo_id
-    , discount AS total_discount_dollars
-    , status AS status_promo
+    promo_id
+    , name_promo
+    , total_discount_usd
+    , status_promo
     FROM src_promos
     )
 
