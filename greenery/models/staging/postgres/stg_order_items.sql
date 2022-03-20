@@ -5,9 +5,9 @@ WITH src_order_items AS (
 
 renamed_casted AS (
     SELECT
-        order_id AS order_id
-        , product_id AS product_id
-        , quantity AS quantity
+        order_id
+        , product_id
+        , quantity
     FROM src_order_items
     )
 

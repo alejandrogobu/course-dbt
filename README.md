@@ -8,6 +8,83 @@ Template repository for the projects and environment of the course: Analytics en
 
 Apache 2.0
 
+## Week 2  
+
+## Part 1
+
+### 1. What is our user repeat rate?
+
+``` sql
+  SELECT
+    SUM(CASE WHEN total_number_orders > 1 THEN 1 END) repeated_users,
+    SUM(CASE WHEN total_number_orders > 0 THEN 1 END) purchases_users
+from "dbt"."dbt_alejandro_g_marketing"."agg_users_orders"
+  )
+
+SELECT 
+  ROUND(repeated_users::DECIMAL/purchases_users::DECIMAL,3) AS repeat_rate
+FROM repeat_rate
+```
+
+Answer: **79,8%**
+
+### 2. What are good indicators of a user who will likely purchase again? What about indicators of users who are likely NOT to purchase again? If you had more data, what features would you want to look into to answer this question?**
+
+With the demographics we have, users from Texas and California represent 37% of the users who purchase more than once.
+
+It would be interesting to have information such as age, gender...
+
+### 2. Explain the marts models you added. Why did you organize the models in the way you did? ?**
+
+1. I have created a base model to add a unique id for the promos so as not to use the name of the promo as a unique key.  This base model is used in the sgt_promos and stg_orders to add in these models also the unique key.
+
+2. I have created an Enterprise Data Warehouse in the Core folder and these models are the ones that will be used to create the models for the different areas. It has the following dimensions and facts:
+
+  - dim_addresses
+  - dim_products
+  - dim_promos
+  - dim_users
+  - fact_events
+  - fact_orders_products
+  - fact_orders
+
+3. For the Marketing area I have created agg_users_orders with all the information about the users and the orders they have made.
+
+4. For the Product area I have created the agg_user_sessions model in order to be able to analyze all the sessions of each user. To create this model I have previously created the intermediate model int_sessions_events_agg.
+
+The final folder structure is as follows:
+
+-Greenery:
+  -Models
+    -Marts:
+      - Core
+      - Marketing
+      - Product:
+          - Intermediate
+    - Staging:
+      - Postgres:
+        - Base
+
+In each folder there is a schema.yml file with the description of each model and the corresponding tests.
+
+
+## Part 2  
+
+### 1. What assumptions are you making about each model? (i.e. why are you adding each test?)
+
+In total there are 179 tests in the whole project, to validate referential integrity between fact and dimension tables, validate primary keys, validate positive numbers, validate valid values in a specific column, validate creation date vs. delivery date...
+
+In the case of dimensions that were exact copies of the staging I have not added tests as they are redundant.
+
+### 2. Did you find any “bad” data as you added and ran tests on your models? How did you go about either cleaning the data in the dbt model or adjusting your assumptions/tests?
+
+No, I found no errors in the data
+
+### 3. Your stakeholders at Greenery want to understand the state of the data each day. Explain how you would ensure these tests are passing regularly and how you would alert stakeholders about bad data getting through.**
+
+In the case of using dbt cloud we could plan the daily execution and send notifications through a slack channel. In the case of using dbt core we could orchestrate the pipeline with an external tool, for example Dagster or Airflow.
+
+
 # WEEK 1
 
 ### 1. How many users do we have?
@@ -99,3 +176,4 @@ FROM sessions_hour
 ```
 
 Answer: **16.33**
+

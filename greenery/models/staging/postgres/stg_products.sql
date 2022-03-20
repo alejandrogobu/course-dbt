@@ -7,7 +7,7 @@ renamed_casted AS (
     SELECT
         product_id AS product_id
         , name AS product_name
-        , price AS unit_price
+        , price AS unit_price_usd
         , inventory AS inventory
         FROM src_products
     )
