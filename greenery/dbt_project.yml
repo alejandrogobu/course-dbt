@@ -43,3 +43,5 @@ models:
         +schema: marketing
       product:
         +schema: product
+on-run-end:
+  - "{{ grant_usage_on_schemas(target.schema, 'reporting') }}"
