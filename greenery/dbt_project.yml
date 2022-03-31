@@ -39,9 +39,17 @@ models:
       +materialized: table
       core:
         +schema: core
+        +post-hook: "grant select on {{ this }} to group reporting"
       marketing:
         +schema: marketing
+        +post-hook: "grant select on {{ this }} to group marketing"
       product:
         +schema: product
+        +post-hook: "grant select on {{ this }} to group product"
+
 on-run-end:
   - "{{ grant_usage_on_schemas(target.schema, 'reporting') }}"
+
+
+        
+
