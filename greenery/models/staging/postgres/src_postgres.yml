@@ -176,6 +176,8 @@ sources:
               Timestamp when the order was created (UTC).
             tests:
               - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: timestamp without time zone 
           - name: order_cost
             description: >
               Dollar about of the items in the order ($).
@@ -203,9 +205,15 @@ sources:
           - name: estimated_delivery_at
             description: >
               Estimated date of delivery (UTC).
+            tests:
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: timestamp without time zone   
           - name: delivered_at
             description: >
               Actual timestamp of delivery (UTC).
+            tests:
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: timestamp without time zone 
           - name: status
             description: >
               Status of the order.
