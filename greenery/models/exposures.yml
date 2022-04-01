@@ -1,0 +1,15 @@
+
+version: 2
+
+exposures:
+  
+  - name: 'fact_funnel'
+    type: dashboard
+    maturity: high
+    description: >
+      Conversion data for the product dashboard   
+    depends_on:
+      - ref('fact_funnel')      
+    owner:
+      name: Alejandro González Bueno  
+      email: alejandro.gonzalez.bu@gmail.com
