@@ -8,6 +8,111 @@ Template repository for the projects and environment of the course: Analytics en
 
 Apache 2.0
 
+## Week 4
+
+### Part 2a: Product Funnel
+
+I have created a new model, fact_funnel in which I have used the following query, this model is built on the model we had of sessions and users.
+
+``` sql
+WITH sessions AS (
+
+  SELECT 
+  * 
+  FROM {{ ref('agg_user_sessions') }}
+  ), 
+
+
+funnel AS (
+
+    SELECT 
+      '1. Total Sessions' AS step
+      , COUNT( DISTINCT CASE WHEN 
+                page_view > 0
+                OR add_to_cart > 0
+                OR checkout > 0 
+                OR package_shipped > 0
+                THEN session_id 
+                ELSE NULL END) AS data_value
+    FROM sessions
+
+    UNION ALL
+
+    SELECT
+      '2. Add to Cart Sessions' AS step
+      , COUNT(DISTINCT CASE WHEN 
+              add_to_cart > 0
+              OR checkout > 0 
+              OR package_shipped > 0
+              THEN session_id
+              ELSE NULL END) AS data_value
+    FROM sessions
+
+    UNION ALL
+    
+    SELECT
+        '3. Checkout Sessions' AS step
+        , COUNT(DISTINCT CASE WHEN 
+                checkout > 0 
+                OR package_shipped > 0
+                THEN session_id 
+                ELSE NULL END) AS data_value
+    FROM sessions
+
+    ), 
+
+previous_steps AS (
+
+    SELECT 
+        step
+        , data_value
+        , LAG(data_value) OVER () AS previous_step
+        , MAX(data_value) OVER () AS first_step
+    FROM funnel 
+
+    ),
+
+final AS (
+
+    SELECT 
+        step
+        , data_value
+        , previous_step
+        , ROUND(data_value / previous_step::NUMERIC, 2) AS step_conversion
+    FROM previous_steps
+    
+    )
+
+SELECT * FROM final
+
+```
+
+Answer:
+
+| step                    | data_value  | previous_step  | step_conversion |
+| ------------------------| ------------| ---------------| ----------------|
+| 1. Total Sessions	      | 578         | NULL           | NULL            |
+| 2. Add to Cart Sessions	| 467         | 578            | 0.81            |
+| 3. Checkout Sessions    | 361         | 467            | 0.77            |
+
+
+### 3A. dbt next steps for you
+
+
+Currently in my company we use dbt to build models and to be able to perform internal analysis on our users etc..
+At the time of implementing dbt internally, the most valuable aspect of dbt was the documentation, since the data team created models for the business team to use, but since there was no documentation, it was complex. On the other hand, being able to add tests easily allowed us to add more data quality. Finally, it was code-based so that we could have version control and make it more developer-friendly.
+
+After the course I think we can improve the organization of the models and refactor some models using jinja and macros.
+
+The next step will be to start helping customers to implement dbt in their analytical stack.
+
+
+### Part 3b: Setting up for production / scheduled dbt run of your project
+
+Currently I think dbt cloud would be more than enough as the data is uploaded once a day and could be easily configured. Also with dbt cloud CI it makes it easy to deploy the code and also to create development environments. 
+
+These days I have been testing Dagster and Prefect, I think it would be a very good idea that you organize a Dasgter course :) 
+
 ## Week 3  
 
 ## Part 1

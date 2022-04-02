@@ -24,9 +24,9 @@ funnel AS (
     SELECT
       '2. Add to Cart Sessions' AS step
       , COUNT(DISTINCT CASE WHEN 
-                add_to_cart > 0
-                OR checkout > 0 
-                OR package_shipped > 0
+              add_to_cart > 0
+              OR checkout > 0 
+              OR package_shipped > 0
               THEN session_id
               ELSE NULL END) AS data_value
     FROM sessions
@@ -66,4 +66,4 @@ final AS (
     
     )
 
-SELECT * FROM FINAL
+SELECT * FROM final
